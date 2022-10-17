@@ -1,8 +1,12 @@
 import express from 'express';
 import { healthRouter } from './routers/health';
+import { environment } from './utils/environment';
 
-const app = express();
+export const getApp = async () => {  
+  const app = express();
+  environment.loadEnv();
+  
+  app.use('/health', healthRouter);
 
-app.use('/health', healthRouter);
-
-export { app };
+  return app;
+};
