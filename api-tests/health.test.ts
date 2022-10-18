@@ -8,7 +8,7 @@ describe('GET /', () => {
     expect(res.status).toBe(200);
     expect(body).toEqual({
       up: true,
-      dbConnected: false,
+      dbConnected: true,
     });
   });
 });

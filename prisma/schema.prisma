@@ -6,12 +6,29 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model Consumer {
   id   Int    @id @default(autoincrement())
   name String
-  key  String
+  key  String @unique
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  permissions ConsumerPermissions?
+}
+
+model ConsumerPermissions {
+  id Int @id @default(autoincrement())
+
+  getIngredient Boolean @default(false)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  consumer   Consumer @relation(fields: [consumerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  consumerId Int      @unique
 }
