@@ -6,7 +6,10 @@
   "scripts": {
     "test:unit": "vitest src",
     "test:api": "start-server-and-test dev http://localhost:3000/health 'vitest api-tests'",
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "db:setup": "npm run db:migrate && npm run db:seed",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "node --require esbuild-register prisma/seed.ts"
   },
   "repository": {
     "type": "git",
@@ -24,13 +27,16 @@
     "@typescript-eslint/parser": "^5.40.1",
     "esbuild": "^0.15.11",
     "esbuild-node-tsc": "^2.0.4",
+    "esbuild-register": "^3.3.3",
     "eslint": "^8.25.0",
     "nodemon": "^2.0.20",
+    "prisma": "^4.4.0",
     "start-server-and-test": "^1.14.0",
     "typescript": "^4.8.4",
     "vitest": "^0.24.3"
   },
   "dependencies": {
+    "@prisma/client": "^4.4.0",
     "dotenv": "^16.0.3",
     "express": "^4.18.2"
   }
