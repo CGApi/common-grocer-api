@@ -4,7 +4,7 @@ import { environment } from '../src/utils/environment';
 
 describe('GET /', () => {
   const url = `http://localhost:${environment.port()}/ingredients`;
-  const consumersToCleanup = [];
+  const consumersToCleanup: string[] = [];
 
   afterAll(async () => {
     await db.consumer.deleteMany({ where: { key: { in: consumersToCleanup } } });
