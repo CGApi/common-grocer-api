@@ -26,10 +26,10 @@ jobs:
     - name: Setup Test DB
       run: "${DOCKER_EXEC} npm run db:setup"
 
-    - name: Test
+    - name: Unit Tests
       run: "${DOCKER_EXEC} npm run test:unit"
 
-    - name: Test
+    - name: API Tests
       run: "${DOCKER_EXEC} npm run test:api"
 
     - name: Stop containers
