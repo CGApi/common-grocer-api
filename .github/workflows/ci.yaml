@@ -8,7 +8,7 @@ jobs:
     timeout-minutes: 10
     env:
       DOCKER_CMD: docker-compose -f docker-compose.ci.yml
-      DOCKER_EXEC: docker-compose -f docker-compose.ci.yml exec -T app
+      DOCKER_EXEC: docker-compose -f docker-compose.ci.yml run app
     
     steps:
     - name: Setup - Checkout code
