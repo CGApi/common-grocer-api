@@ -25,7 +25,7 @@ model Consumer {
   status ConsumerStatus @default(valid)
 
   permissions ConsumerPermissions?
-  notes       ConsumerNotes[]
+  notes       ConsumerNote[]
 }
 
 model ConsumerPermissions {
@@ -39,7 +39,7 @@ model ConsumerPermissions {
   consumerId Int      @unique
 }
 
-model ConsumerNotes {
+model ConsumerNote {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
 
