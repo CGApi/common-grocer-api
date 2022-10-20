@@ -1,9 +1,11 @@
+import { ConsumerStatus } from '@prisma/client';
 import { db } from '../src/utils/db';
 
 const seed = async () => {
   const localDevData = {
     name: 'Local Dev Consumer',
     key: 'valid-key',
+    status: ConsumerStatus.valid,
   };
   await db.consumer.upsert({
     where: {

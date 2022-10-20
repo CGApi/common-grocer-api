@@ -32,13 +32,13 @@
     "esbuild-register": "^3.3.3",
     "eslint": "^8.25.0",
     "nodemon": "^2.0.20",
-    "prisma": "^4.4.0",
+    "prisma": "^4.5.0",
     "start-server-and-test": "^1.14.0",
     "typescript": "^4.8.4",
     "vitest": "^0.24.3"
   },
   "dependencies": {
-    "@prisma/client": "^4.4.0",
+    "@prisma/client": "^4.5.0",
     "dotenv": "^16.0.3",
     "express": "^4.18.2"
   }

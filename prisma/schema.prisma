@@ -10,25 +10,41 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Consumer {
-  id   Int    @id @default(autoincrement())
-  name String
-  key  String @unique
+enum ConsumerStatus {
+  valid
+  revoked
+}
 
+model Consumer {
+  id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
 
+  name   String
+  key    String         @unique
+  status ConsumerStatus @default(valid)
+
   permissions ConsumerPermissions?
+  notes       ConsumerNotes[]
 }
 
 model ConsumerPermissions {
-  id Int @id @default(autoincrement())
-
-  getIngredient Boolean @default(false)
-
+  id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
 
+  getIngredient Boolean @default(false)
+
   consumer   Consumer @relation(fields: [consumerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   consumerId Int      @unique
+}
+
+model ConsumerNotes {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+
+  note String
+
+  consumer   Consumer @relation(fields: [consumerId], references: [id], onUpdate: Cascade)
+  consumerId Int
 }

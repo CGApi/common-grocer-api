@@ -1,3 +1,4 @@
+import { Consumer, ConsumerPermissions } from '@prisma/client';
 import { NextFunction, Request, Response } from 'express';
 import { db } from '../utils/db';
 
@@ -12,10 +13,17 @@ export const validateConsumer = async (req: Request, res: Response, next: NextFu
     return res.status(401).json({ msg: `Consumer not found for provided API key (${apiKey})` });
   }
 
-  if (!consumer.permissions) {
-    return res.status(401).json({ msg: `Consumer priveleges not setup for provided API key (${apiKey})` });
+  if (consumer.status !== 'valid') {
+    return res.status(401).json({
+      msg: 'Consumer is not in good standing. Please contact admin to understand why.',
+      consumerStatus: consumer.status
+    });
   }
 
-  req.consumer = consumer as any;
+  if (consumer.permissions === null) {
+    return res.status(401).json({ msg: `Consumer permissions not setup for provided API key (${apiKey})` });
+  }
+
+  req.consumer = consumer as Consumer & { permissions: ConsumerPermissions };
   return next();
 };

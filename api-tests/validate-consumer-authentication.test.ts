@@ -17,11 +17,21 @@ describe('GET /', () => {
     expect(body).toEqual({ msg: 'x-api-key header is required' });
   });
 
-  it('returns a 401 when the api key is not valid', async () => {
+  it('returns a 401 when the api key is not found', async () => {
     const res = await fetch(url, { headers: { 'x-api-key': 'invalid' } });
     const body = await res.json();
     expect(res.status).toBe(401);
     expect(body).toEqual({ msg: 'Consumer not found for provided API key (invalid)' });
+  });
+
+  it('returns a 401 when the consumer is not valid', async () => {
+    const key = new Date().getTime().toString();
+    await db.consumer.create({ data: { name: 'api-test-consumer', key, status: 'revoked' } });
+    consumersToCleanup.push(key);
+    const res = await fetch(url, { headers: { 'x-api-key': key } });
+    const body = await res.json();
+    expect(res.status).toBe(401);
+    expect(body).toEqual({ msg: 'Consumer is not in good standing. Please contact admin to understand why.', consumerStatus: 'revoked' });
   });
 
   it('returns a 401 when the api key is valid but the consumer is missing permissions', async () => {
@@ -31,6 +41,6 @@ describe('GET /', () => {
     const res = await fetch(url, { headers: { 'x-api-key': key } });
     const body = await res.json();
     expect(res.status).toBe(401);
-    expect(body).toEqual({ msg: `Consumer priveleges not setup for provided API key (${key})` });
+    expect(body).toEqual({ msg: `Consumer permissions not setup for provided API key (${key})` });
   });
 });
