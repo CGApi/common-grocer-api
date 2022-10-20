@@ -1,17 +1,15 @@
-name: Update test db after PR merge
+name: Update test after PR merge
 on:
-  pull_request:
-    branches: [ main ]
   push:
     branches: [ main ]
-    paths: [ prisma/migrations/** ]
   workflow_dispatch:
 
 env:
   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
 jobs:
-  Run_Migrations:
+  Migrations:
+    name: Run DB Migrations
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
