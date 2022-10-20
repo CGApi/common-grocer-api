@@ -12,8 +12,7 @@
     "dev": "nodemon",
     "db:setup": "npm run db:migrate && npm run db:seed",
     "db:migrate": "prisma migrate dev",
-    "db:seed": "node --require esbuild-register prisma/seed.ts",
-    "script": "node --require esbuild-register"
+    "db:seed": "node --require esbuild-register prisma/seed.ts"
   },
   "repository": {
     "type": "git",
