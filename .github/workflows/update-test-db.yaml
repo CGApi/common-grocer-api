@@ -1,6 +1,8 @@
 name: Update test db after PR merge
 on:
-  push: 
+  pull_request:
+    branches: [ main, integration ]
+  push:
     branches: [ main ]
     paths: [ prisma/migrations/** ]
   workflow_dispatch:
