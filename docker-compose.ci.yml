@@ -22,6 +22,7 @@ services:
       - CI=true
       - PORT=3000
       - DATABASE_URL=postgres://postgres:postgres@db:5432/cgapi
+      - SHADOW_DATABASE_URL=postgres://postgres:postgres@db:5432/cgapi
     ports:
       - 3000:3000
     depends_on:
