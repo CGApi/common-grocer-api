@@ -1,12 +1,17 @@
 name: Update test db after PR merge
 on:
+  pull_request:
+    branches: [ main ]
   push:
     branches: [ main ]
     paths: [ prisma/migrations/** ]
   workflow_dispatch:
 
+env:
+  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
 jobs:
-  Update_DB:
+  Run_Migrations:
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -19,3 +24,11 @@ jobs:
     
     - name: Push migrations
       run: docker run --rm -e DATABASE_URL=${{ secrets.DATABASE_URL_TEST }} -e SHADOW_DATABASE_URL=${{ secrets.DATABASE_URL_TEST_SHADOW }} ci npx prisma migrate deploy
+
+  Deploy:
+      name: Deploy app
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2
+        - uses: superfly/flyctl-actions/setup-flyctl@master
+        - run: flyctl deploy --remote-only
