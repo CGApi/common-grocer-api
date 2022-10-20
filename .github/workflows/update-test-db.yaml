@@ -20,4 +20,4 @@ jobs:
       run: docker build -t ci .
     
     - name: Push migrations
-      run: docker run --rm -e DATABASE_URL=${{ secrets.DATABASE_URL_TEST }} ci npx prisma migrate deploy
+      run: docker run --rm -e DATABASE_URL=${{ secrets.DATABASE_URL_TEST }} -e SHADOW_DATABASE_URL=${{ secrets.DATABASE_URL_TEST_SHADOW }} ci npx prisma migrate deploy
