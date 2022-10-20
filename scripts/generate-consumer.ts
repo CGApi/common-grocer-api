@@ -37,7 +37,7 @@ async function generateConsumer() {
     process.exit(1);
   }
 
-  const permissions = getPermissionValues(permission, validPermissions);
+  const permissions = getPermissionValues(permission ?? [], validPermissions);
 
   const consumer = await db.consumer.create({
     data: {
