@@ -1,5 +1,5 @@
 import { db } from '../../src/utils/db';
-import { logger } from '../logger';
+import { logger } from './logger';
 
 export async function getValidPermissions() {
   const permissionObject = await db.consumerPermissions.findFirst();

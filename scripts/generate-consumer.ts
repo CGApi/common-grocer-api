@@ -1,7 +1,7 @@
 import { parseArgs } from 'node:util';
 import { v4 as uuid } from 'uuid';
 import { db } from '../src/utils/db';
-import { logger } from './logger';
+import { logger } from './utils/logger';
 import { getPermissionValues, getValidPermissions } from './utils/permissions';
 
 generateConsumer();

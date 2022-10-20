@@ -1,0 +1,21 @@
+name: Update test db after PR merge
+on:
+  push: [ main ]
+  paths: [ prisma/migrations/** ]
+
+jobs:
+  Update_DB:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      DATABASE_URL: ${{ secrets.TEST_DB_URL }}
+
+    steps:
+    - name: Setup - Checkout code
+      uses: actions/checkout@v1
+
+    - name: Create docker image
+      run: docker build -t ci .
+    
+    - name: Push migrations
+      run: docker run --rm -e DATABASE_URL=${{ secrets.TEST_DB_URL }} ci npx prisma migrate deploy
