@@ -1,0 +1,30 @@
+on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Environment'
+        required: true
+        default: 'test'
+        type: choice
+        options:
+        - test
+      name:
+        description: 'Name of the new consumer'
+        required: true
+        type: string
+
+jobs:
+  generate-consumer:
+    name: Generate Consumer
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+    - name: Setup - Checkout code
+      uses: actions/checkout@v1
+
+    - name: Create docker image
+      run: docker build -t ci .
+    
+    - name: Push migrations
+      run: docker run --rm -e DATABASE_URL=${{ secrets.DATABASE_URL_TEST }} ci node --require esbuild-register scripts/generate-consumer.ts --name ${{ inputs.name }}
