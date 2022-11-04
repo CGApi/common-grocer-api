@@ -20,11 +20,14 @@ jobs:
     timeout-minutes: 10
 
     steps:
-    - name: Setup - Checkout code
-      uses: actions/checkout@v1
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18
+        cache: 'npm'
 
-    - name: Create docker image
-      run: docker build -t ci .
-    
-    - name: Push migrations
-      run: docker run --rm -e DATABASE_URL=${{ secrets.DATABASE_URL_TEST }} ci node --require esbuild-register scripts/generate-consumer.ts --name ${{ inputs.name }}
+    - run: npm i
+    - run: npx prisma generate
+
+    - name: Run script
+      run: DATABASE_URL=${{ secrets.DATABASE_URL_TEST }} node --require esbuild-register scripts/generate-consumer.ts --name ${{ inputs.name }}
