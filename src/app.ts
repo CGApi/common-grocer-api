@@ -1,8 +1,16 @@
 import express from 'express';
+import { validateConsumer } from './middleware/validateConsumer';
 import { healthRouter } from './routers/health';
+import { ingredientsRouter } from './routers/ingredients';
+import { environment } from './utils/environment';
 
-const app = express();
+export const getApp = async () => {  
+  const app = express();
+  environment.loadEnv();
+  
+  app.use('/health', healthRouter);
+  app.use(validateConsumer);
+  app.use('/ingredients', ingredientsRouter);
 
-app.use('/health', healthRouter);
-
-export { app };
+  return app;
+};

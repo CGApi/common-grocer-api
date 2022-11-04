@@ -1,11 +1,21 @@
 import { Router } from 'express';
+import { db } from '../utils/db';
 
 const router = Router();
 
-router.get('/', (req, res, next) => {
-  return res.status(200).json({
+const isDbConnected = async () => {
+  try {
+    return !!(await db.consumer.findFirst);
+  } catch (e) {
+    return false;
+  }
+};
+
+router.get('/', async (req, res) => {
+  const dbConnected = await isDbConnected();
+  return res.status(dbConnected ? 200 : 500).json({
     up: true,
-    dbConnected: false,
+    dbConnected,
   });
 });
 

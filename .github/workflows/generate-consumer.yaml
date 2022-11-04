@@ -1,0 +1,49 @@
+on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Environment'
+        required: true
+        default: 'test'
+        type: choice
+        options:
+        - test
+      name:
+        description: 'Name of the new consumer'
+        required: true
+        type: string
+      permissions:
+        description: 'Permissions to add to this consumer. format: getIngredients,setIngredients'
+        required: false
+        type: string
+
+jobs:
+  setup:
+    name: Parse permissions array
+    runs-on: ubuntu-latest
+    outputs:
+      permissions: ${{ steps.vars.outputs.permission_list }}
+    steps:
+      - name: Create an array of projects
+        if: ${{ inputs.permissions }}
+        id: vars
+        run: echo "::set-output name=permission_list::$(jq 'split(",")' -Rc <(echo '${{ inputs.permissions }}'))"
+
+  generate-consumer:
+    needs: setup
+    name: Generate Consumer
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18
+        cache: 'npm'
+
+    - run: npm i
+    - run: npx prisma generate
+
+    - name: Run script
+      run: DATABASE_URL=${{ secrets.DATABASE_URL_TEST }} node --require esbuild-register scripts/generate-consumer.ts --name ${{ fromJson(needs.setup.outputs.permissions) }}
